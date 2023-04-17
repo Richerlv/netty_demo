@@ -2,6 +2,7 @@ package com.Richerlv.serializer;
 
 import com.Richerlv.packet.Command;
 import com.Richerlv.packet.LoginRequestPacket;
+import com.Richerlv.packet.LoginResponsePacket;
 import com.Richerlv.packet.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -22,6 +23,7 @@ public class PacketCodeC {
     static {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(Command.LOGIN_REQUEST, LoginRequestPacket.class);
+        packetTypeMap.put(Command.LOGIN_RESPONSE, LoginResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
@@ -33,7 +35,7 @@ public class PacketCodeC {
      * @param packet
      * @return
      */
-    public ByteBuf encode(Packet packet) {
+    public static ByteBuf encode(Packet packet) {
         //1.创建ByteBuf对象
         ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
 
@@ -56,7 +58,7 @@ public class PacketCodeC {
      * @param byteBuf
      * @return
      */
-    public Packet decode(ByteBuf byteBuf) {
+    public static Packet decode(ByteBuf byteBuf) {
 
         //跳过魔数   TODO:应该要验证魔数
         byteBuf.skipBytes(4);
@@ -83,11 +85,11 @@ public class PacketCodeC {
 
     }
 
-    private Serializer getSerializer(byte serializeAlgorithm) {
+    private static Serializer getSerializer(byte serializeAlgorithm) {
         return serializerMap.get(serializeAlgorithm);
     }
 
-    private Class<? extends Packet> getRequestType(byte command) {
+    private static Class<? extends Packet> getRequestType(byte command) {
         return packetTypeMap.get(command);
     }
 }

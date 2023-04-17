@@ -19,7 +19,7 @@ public class FirstClientHandler extends ChannelInboundHandlerAdapter {
         System.out.println(new Date() + ": 客户端写入数据");
         //获取数据
         ByteBuf byteBuf = getByteBuf(ctx);
-        //写数据
+        //写数据并发送
         ctx.channel().writeAndFlush(byteBuf);
     }
 

@@ -24,7 +24,7 @@ public class NettyClient {
         bootstrap.group(workerGroup).channel(NioSocketChannel.class).handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
-                socketChannel.pipeline().addLast(new FirstClientHandler());
+                socketChannel.pipeline().addLast(new ClientHandler());
             }
         });
         //建立连接
