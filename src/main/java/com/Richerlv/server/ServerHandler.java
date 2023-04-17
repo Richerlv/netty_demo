@@ -1,8 +1,6 @@
 package com.Richerlv.server;
 
-import com.Richerlv.packet.LoginRequestPacket;
-import com.Richerlv.packet.LoginResponsePacket;
-import com.Richerlv.packet.Packet;
+import com.Richerlv.packet.*;
 import com.Richerlv.serializer.PacketCodeC;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,6 +20,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
         //解码
         Packet packet = PacketCodeC.decode(requestByteBuf);
+        System.out.println(packet);
         if(packet instanceof LoginRequestPacket) {
             LoginRequestPacket loginRequestPacket = (LoginRequestPacket) packet;
             //构造登陆响应包
@@ -41,6 +40,15 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
             //编码
             ByteBuf responseByteBuf = PacketCodeC.encode(loginResponsePacket);
+            ctx.channel().writeAndFlush(responseByteBuf);
+        } else if (packet instanceof MessageRequestPacket) {
+            // 处理消息
+            MessageRequestPacket messageRequestPacket = ((MessageRequestPacket) packet);
+            System.out.println(new Date() + ": 收到客户端消息: " + messageRequestPacket.getMessage());
+
+            MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
+            messageResponsePacket.setMessage("服务端回复【" + messageRequestPacket.getMessage() + "】");
+            ByteBuf responseByteBuf = PacketCodeC.encode(messageResponsePacket);
             ctx.channel().writeAndFlush(responseByteBuf);
         }
 

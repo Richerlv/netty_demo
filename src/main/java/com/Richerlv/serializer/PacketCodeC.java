@@ -1,9 +1,6 @@
 package com.Richerlv.serializer;
 
-import com.Richerlv.packet.Command;
-import com.Richerlv.packet.LoginRequestPacket;
-import com.Richerlv.packet.LoginResponsePacket;
-import com.Richerlv.packet.Packet;
+import com.Richerlv.packet.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 
@@ -24,6 +21,8 @@ public class PacketCodeC {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(Command.LOGIN_REQUEST, LoginRequestPacket.class);
         packetTypeMap.put(Command.LOGIN_RESPONSE, LoginResponsePacket.class);
+        packetTypeMap.put(Command.MESSAGE_REQUEST, MessageRequestPacket.class);
+        packetTypeMap.put(Command.MESSAGE_RESPONSE, MessageResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
