@@ -2,6 +2,7 @@ package com.Richerlv.client;
 
 import com.Richerlv.packet.MessageRequestPacket;
 import com.Richerlv.serializer.PacketCodeC;
+import com.Richerlv.serializer.Spliter;
 import com.Richerlv.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -32,6 +33,7 @@ public class NettyClient {
         bootstrap.group(workerGroup).channel(NioSocketChannel.class).handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
+                socketChannel.pipeline().addLast(new Spliter());
                 socketChannel.pipeline().addLast(new ClientHandler());
             }
         });

@@ -1,5 +1,6 @@
 package com.Richerlv.server;
 
+import com.Richerlv.serializer.Spliter;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -27,6 +28,8 @@ public class NettyServer {
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
+                        ch.pipeline().addLast(new Spliter());
+//                        ch.pipeline().addLast(new AuthHandler());
                         ch.pipeline().addLast(new ServerHandler());
                     }
                 });
