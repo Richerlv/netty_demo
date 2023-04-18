@@ -11,6 +11,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author lvyanling
@@ -28,8 +29,8 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         System.out.println(new Date() + ": 客户端开始登陆");
 
         LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
-        loginRequestPacket.setUserId(1);
-        loginRequestPacket.setUsername("辣条总统");
+        loginRequestPacket.setUserId(UUID.randomUUID().toString());
+        loginRequestPacket.setUserName("辣条总统");
         loginRequestPacket.setPassword("123456");
 
         ByteBuf byteBuf = PacketCodeC.encode(loginRequestPacket);
@@ -53,7 +54,9 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
             }
         } else if (packet instanceof MessageResponsePacket) {
             MessageResponsePacket messageResponsePacket = (MessageResponsePacket) packet;
-            System.out.println(new Date() + ": 收到服务端的消息: " + messageResponsePacket.getMessage());
+            String fromUserId = messageResponsePacket.getFromUserId();
+            String fromUserName = messageResponsePacket.getFromUserName();
+            System.out.println(fromUserId + ":" + fromUserName + " -> " + messageResponsePacket .getMessage());
         }
     }
 }

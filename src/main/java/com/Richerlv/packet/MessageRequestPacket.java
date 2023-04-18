@@ -1,5 +1,6 @@
 package com.Richerlv.packet;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -8,8 +9,10 @@ import lombok.Data;
  */
 
 @Data
+@AllArgsConstructor
 public class MessageRequestPacket extends Packet{
 
+    private String toUserId;
     private String message;
 
     @Override
