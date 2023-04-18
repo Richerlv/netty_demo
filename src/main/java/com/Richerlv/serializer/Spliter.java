@@ -22,6 +22,7 @@ public class Spliter extends LengthFieldBasedFrameDecoder {
         // 屏蔽非本协议的客户端
         if (in.getInt(in.readerIndex()) != PacketCodeC.MAGIC_NUMBER) {
             ctx.channel().close();
+            System.out.println("非本协议的客户端 ——屏蔽");
             return null;
         }
 
