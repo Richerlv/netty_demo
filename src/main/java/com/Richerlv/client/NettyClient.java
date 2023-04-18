@@ -5,6 +5,7 @@ import com.Richerlv.client.handler.MessageResponseHandler;
 import com.Richerlv.packet.MessageRequestPacket;
 import com.Richerlv.serializer.PacketDecoder;
 import com.Richerlv.serializer.PacketEncoder;
+import com.Richerlv.serializer.Spliter;
 import com.Richerlv.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -34,6 +35,8 @@ public class NettyClient {
         bootstrap.group(workerGroup).channel(NioSocketChannel.class).handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
+                //基于长度域拆包
+                socketChannel.pipeline().addLast(new Spliter());
                 socketChannel.pipeline().addLast(new PacketDecoder());
                 socketChannel.pipeline().addLast(new PacketEncoder());
                 socketChannel.pipeline().addLast(new LoginResponseHandler());

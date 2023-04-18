@@ -2,6 +2,7 @@ package com.Richerlv.server;
 
 import com.Richerlv.serializer.PacketDecoder;
 import com.Richerlv.serializer.PacketEncoder;
+import com.Richerlv.serializer.Spliter;
 import com.Richerlv.server.handler.LoginRequestHandler;
 import com.Richerlv.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -31,6 +32,8 @@ public class NettyServer {
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
+                        //基于长度域拆包
+                        ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketEncoder());
                         ch.pipeline().addLast(new LoginRequestHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());
