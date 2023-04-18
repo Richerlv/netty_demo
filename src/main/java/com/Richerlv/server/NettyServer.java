@@ -1,5 +1,9 @@
 package com.Richerlv.server;
 
+import com.Richerlv.serializer.PacketDecoder;
+import com.Richerlv.serializer.PacketEncoder;
+import com.Richerlv.server.handler.LoginRequestHandler;
+import com.Richerlv.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -27,7 +31,10 @@ public class NettyServer {
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
-                        ch.pipeline().addLast(new ServerHandler());
+                        ch.pipeline().addLast(new PacketEncoder());
+                        ch.pipeline().addLast(new LoginRequestHandler());
+                        ch.pipeline().addLast(new MessageRequestHandler());
+                        ch.pipeline().addLast(new PacketDecoder());
                     }
                 });
 //        serverBootstrap.bind(1000);

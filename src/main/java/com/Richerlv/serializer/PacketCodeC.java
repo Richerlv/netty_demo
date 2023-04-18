@@ -31,12 +31,13 @@ public class PacketCodeC {
 
     /**
      * 编码
+     * @param byteBuf
      * @param packet
      * @return
      */
-    public static ByteBuf encode(Packet packet) {
+    public static ByteBuf encode(ByteBuf byteBuf, Packet packet) {
         //1.创建ByteBuf对象
-        ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
+        byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
 
         //2.序列化Java对象
         byte[] bytes = Serializer.DEFAULT.serialize(packet);

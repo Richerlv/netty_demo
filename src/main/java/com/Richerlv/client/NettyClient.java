@@ -1,10 +1,12 @@
 package com.Richerlv.client;
 
+import com.Richerlv.client.handler.LoginResponseHandler;
+import com.Richerlv.client.handler.MessageResponseHandler;
 import com.Richerlv.packet.MessageRequestPacket;
-import com.Richerlv.serializer.PacketCodeC;
+import com.Richerlv.serializer.PacketDecoder;
+import com.Richerlv.serializer.PacketEncoder;
 import com.Richerlv.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -32,7 +34,10 @@ public class NettyClient {
         bootstrap.group(workerGroup).channel(NioSocketChannel.class).handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
-                socketChannel.pipeline().addLast(new ClientHandler());
+                socketChannel.pipeline().addLast(new PacketDecoder());
+                socketChannel.pipeline().addLast(new PacketEncoder());
+                socketChannel.pipeline().addLast(new LoginResponseHandler());
+                socketChannel.pipeline().addLast(new MessageResponseHandler());
             }
         });
         //建立连接
@@ -97,10 +102,12 @@ public class NettyClient {
 
                     MessageRequestPacket packet = new MessageRequestPacket();
                     packet.setMessage(line);
-                    ByteBuf byteBuf = PacketCodeC.encode(packet);
-                    channel.writeAndFlush(byteBuf);
+
+                    channel.writeAndFlush(packet);
                 }
             }
         }).start();
     }
+
 }
+
